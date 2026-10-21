@@ -1,0 +1,2 @@
+# Week 7: Guest Speaker on Stakeholders
+A guest speaker from a product agency argued that polish matters more than the course has suggested. She said executives and clients often judge an idea by how finished it looks, so rough prototypes can get rejected early. This pushes back on the Week 2 idea that feedback matters more than polish. Professor Lin responded that polish should match the audience: rough for users, refined for stakeholders.

@@ -1,0 +1,2 @@
+# Week 8: Pantry Pal Research Findings
+Jordan's contextual inquiry found that people rarely check what is in their fridge before deciding what to cook. Two of the three participants threw away food that week. This finding changed Priya's prototype: the home screen now starts with a quick fridge check instead of a recipe search. The AI generated recipe card layouts tested poorly because they showed too much text, which supports the Week 3 point that AI output must be checked against user needs.

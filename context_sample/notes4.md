@@ -1,0 +1,2 @@
+# Week 4: User Research Methods
+Professor Lin explained that interviews from Week 1 work best when paired with observation. Users often say one thing and do another. Contextual inquiry means watching someone use a product in their real environment. Survey data can show patterns, but it rarely explains why people behave the way they do. Research findings should feed directly into the next round of prototyping.

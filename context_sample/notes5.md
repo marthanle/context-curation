@@ -1,0 +1,2 @@
+# Week 5: Critique and Feedback
+Studio critique is where designers share work in progress with peers. Professor Lin said critique should focus on the problem the design is solving, not personal taste. Good feedback is specific and actionable. Critique connects to the iteration loop from Week 2, since every round of feedback should lead to a revised prototype. Designers should also critique AI generated concepts the same way they critique human work.

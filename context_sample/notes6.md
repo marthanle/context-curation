@@ -1,0 +1,2 @@
+# Week 6: Studio Project Kickoff
+Our team project is a recipe app called Pantry Pal that suggests meals based on ingredients people already have. Jordan is leading user research and Priya is leading prototyping. Jordan plans to use contextual inquiry by watching three people cook dinner at home. Priya will build paper prototypes first, then move to Figma. The team will use an AI tool to generate early recipe card layouts, but every layout has to be tested with real users before it is kept.
