@@ -15,12 +15,13 @@ def bounded_int(value, low, high, name):
 
 
 class CorpusTools:
-    def __init__(self, folder, db_path, collection=None, embed=None, graph_path=None):
+    def __init__(self, folder, db_path, collection=None, embed=None, graph_path=None, snapshot_fingerprint=None):
         self.folder = Path(folder).resolve()
         self.db_path = Path(db_path).resolve()
         self._collection = collection
         self._embed = embed
         self.graph_path = Path(graph_path) if graph_path else Path(__file__).parent / "local_graph.json"
+        self.snapshot_fingerprint = snapshot_fingerprint
 
     @property
     def scope(self):
@@ -121,11 +122,11 @@ class CorpusTools:
 
     def graph_status(self):
         try:
-            data, graph = load_graph(self.graph_path, self.folder)
+            data, graph = load_graph(self.graph_path, self.folder, self.snapshot_fingerprint)
             return {"ready": True, "relationships": graph.number_of_edges(), "entities": graph.number_of_nodes(),
-                    "model": data["model"], "freshness": "source fingerprint matches"}
+                    "model": data["model"], "freshness": "published snapshot matches" if self.snapshot_fingerprint else "source fingerprint matches"}
         except (ValueError, OSError) as exc:
             return {"ready": False, "message": str(exc)}
 
     def get_relationships(self, entity="", query="", limit=12):
-        return retrieve_relationships(self.graph_path, self.folder, entity, query, limit)
+        return retrieve_relationships(self.graph_path, self.folder, entity, query, limit, self.snapshot_fingerprint)

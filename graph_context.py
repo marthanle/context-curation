@@ -43,7 +43,7 @@ def atomic_json(path, value):
             temporary.unlink()
 
 
-def load_graph(path, folder):
+def load_graph(path, folder, snapshot_fingerprint=None):
     path = Path(path)
     if not path.is_file():
         raise ValueError("Graph not found. Run build_graph.py with the same --folder and --graph first.")
@@ -52,7 +52,7 @@ def load_graph(path, folder):
         raise ValueError("Graph is incomplete or unsupported; rebuild it with build_graph.py.")
     if data.get("corpus") != str(Path(folder).resolve()):
         raise ValueError("Graph belongs to a different corpus; select the matching --folder/--graph.")
-    if data.get("corpus_sha256") != corpus_fingerprint(folder):
+    if data.get("corpus_sha256") != (snapshot_fingerprint or corpus_fingerprint(folder)):
         raise ValueError("Graph is stale. Rebuild graph and vector index after prepared context changes.")
     graph = nx.MultiDiGraph()
     for edge in data["relationships"]:
@@ -64,12 +64,12 @@ def terms(text):
     return {word for word in re.findall(r"[^\W_]+", text.casefold()) if word not in STOPWORDS and len(word) > 1}
 
 
-def retrieve_relationships(path, folder, entity="", query="", limit=12):
+def retrieve_relationships(path, folder, entity="", query="", limit=12, snapshot_fingerprint=None):
     if not isinstance(limit, int) or isinstance(limit, bool) or not 1 <= limit <= 20:
         raise ValueError("limit must be an integer from 1 to 20")
     if len(entity) > 200 or len(query) > 4000:
         raise ValueError("entity/query exceed their 200/4000 character limits")
-    data, graph = load_graph(path, folder)
+    data, graph = load_graph(path, folder, snapshot_fingerprint)
     selector = entity.strip().casefold()
     nodes = {n for n in graph if selector and (selector == n.casefold() or selector in n.casefold())}
     words = terms(query)
@@ -90,6 +90,6 @@ def retrieve_relationships(path, folder, entity="", query="", limit=12):
             "model": data["model"], "corpus_sha256": data["corpus_sha256"], "illustrative": False}
 
 
-def get_graph_context(path, folder, entity="", query="", limit=12):
-    result = retrieve_relationships(path, folder, entity, query, limit)
+def get_graph_context(path, folder, entity="", query="", limit=12, snapshot_fingerprint=None):
+    result = retrieve_relationships(path, folder, entity, query, limit, snapshot_fingerprint)
     return json.dumps(result, ensure_ascii=False, indent=2)

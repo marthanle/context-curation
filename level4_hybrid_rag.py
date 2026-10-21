@@ -1,5 +1,6 @@
 """Combine vector evidence and Gemini-extracted graph relationships from prepared context."""
 import argparse
+from pathlib import Path
 from graph_context import get_graph_context
 from model_providers import add_model_arguments, validate_model_arguments, build_prompt, run_answers, positive_int
 
@@ -11,9 +12,12 @@ def main():
     parser.add_argument("--folder", default="prepared_context")
     parser.add_argument("--db", default="./local_vectordb")
     parser.add_argument("--top-k", type=positive_int, default=3)
+    parser.add_argument("--updates", type=Path, help="Read vector and graph artifacts from one Step 6 generation")
     add_model_arguments(parser, default_provider="gemini")
     args = parser.parse_args()
     validate_model_arguments(parser, args)
+    from update_store import resolve_cli_snapshot
+    snapshot = resolve_cli_snapshot(args, parser)
     from level2_vector_rag import get_collection, retrieve_context
 
     # 1. Setup Vector DB (Assuming it's populated from Level 2)
@@ -31,7 +35,7 @@ def main():
     # B) Retrieve persisted relationships by entity or question terms.
     extracted_entity = args.entity
     try:
-        graph_context = get_graph_context(args.graph, args.folder, extracted_entity, user_query)
+        graph_context = get_graph_context(args.graph, args.folder, extracted_entity, user_query, snapshot_fingerprint=snapshot)
     except ValueError as exc:
         print(exc)
         return 1

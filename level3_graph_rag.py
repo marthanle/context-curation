@@ -1,5 +1,6 @@
 """Answer from the persisted Gemini-extracted graph of prepared context."""
 import argparse
+from pathlib import Path
 from graph_context import get_graph_context
 from model_providers import add_model_arguments, validate_model_arguments, build_prompt, run_answers
 
@@ -9,13 +10,16 @@ def main():
     parser.add_argument("--entity", default="", help="Optional entity filter; otherwise rank relationships by the question")
     parser.add_argument("--folder", default="prepared_context")
     parser.add_argument("--graph", default="local_graph.json")
+    parser.add_argument("--updates", type=Path, help="Read the current Step 6 generation")
     add_model_arguments(parser, default_provider="gemini")
     args = parser.parse_args()
     validate_model_arguments(parser, args)
+    from update_store import resolve_cli_snapshot
+    snapshot = resolve_cli_snapshot(args, parser)
 
     entity = args.entity
     try:
-        graph_context = get_graph_context(args.graph, args.folder, entity, args.query)
+        graph_context = get_graph_context(args.graph, args.folder, entity, args.query, snapshot_fingerprint=snapshot)
     except ValueError as exc:
         print(exc)
         return 1

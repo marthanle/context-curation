@@ -64,7 +64,7 @@ def prepare_batches(docs, chunk_size, overlap):
 
 def build(folder, graph_path, model=DEFAULT_MODELS["gemini"], chunk_size=6000, overlap=300,
           max_output_tokens=8192, thinking="auto", thinking_budget=None, refresh=False,
-          generate=generate_answer):
+          generate=generate_answer, documents=None, cache_dir=None, allow_empty=False):
     folder, graph_path = Path(folder).resolve(), Path(graph_path).resolve()
     if graph_path.is_relative_to(folder):
         raise ValueError("Keep the graph artifact outside the prepared source folder")
@@ -72,11 +72,11 @@ def build(folder, graph_path, model=DEFAULT_MODELS["gemini"], chunk_size=6000, o
         raise ValueError("Require 0 <= overlap < chunk-size")
     gemini_thinking_config(model, thinking, thinking_budget)
     fingerprint = corpus_fingerprint(folder)
-    docs = load_corpus_documents(folder)
-    if not docs:
+    docs = load_corpus_documents(folder) if documents is None else documents
+    if not docs and not allow_empty:
         raise ValueError("No supported nonempty prepared documents found")
     batches = prepare_batches(docs, chunk_size, overlap)
-    cache_dir = graph_path.parent / ("." + graph_path.stem + "_cache")
+    cache_dir = Path(cache_dir) if cache_dir else graph_path.parent / ("." + graph_path.stem + "_cache")
     merged, runs, names = {}, [], {}
     print(f"Processing {len(docs)} source units in {len(batches)} batches; uncached batches each call Gemini.", flush=True)
     for number, batch in enumerate(batches, 1):

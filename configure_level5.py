@@ -15,11 +15,14 @@ def main():
     parser.add_argument("--db", type=Path, default=root / "local_vectordb")
     parser.add_argument("--output-dir", type=Path, default=root / "mcp-configs")
     parser.add_argument("--graph", type=Path, default=root / "local_graph.json")
+    parser.add_argument("--updates", type=Path, help="Configure MCP to follow Step 6's published generations")
     args = parser.parse_args()
     # Keep the virtualenv interpreter path: resolving its symlink loses the venv.
     command = str(Path(sys.executable).absolute())
     server_args = [str(root / "level5_mcp_server.py"), "--folder", str(args.folder.resolve()),
                    "--db", str(args.db.resolve()), "--graph", str(args.graph.resolve())]
+    if args.updates:
+        server_args += ["--updates", str(args.updates.resolve())]
     entry = {"command": command, "args": server_args}
     config = {"mcpServers": {"context-curation": entry}}
     args.output_dir.mkdir(parents=True, exist_ok=True)

@@ -11,19 +11,20 @@ EMBED_MODEL = "all-minilm"
 
 def get_collection(db_path="./local_vectordb"):
     import chromadb
-    return chromadb.PersistentClient(path=db_path).get_or_create_collection(
+    from chromadb.config import Settings
+    return chromadb.PersistentClient(path=str(db_path), settings=Settings(anonymized_telemetry=False)).get_or_create_collection(
         name=COLLECTION, embedding_function=None,
     )
 
 
-def index_folder(collection, folder, chunk_size=600, overlap=80):
+def index_folder(collection, folder, chunk_size=600, overlap=80, documents=None, id_prefix=""):
     import ollama
     corpus = str(Path(folder).resolve())
-    documents = load_documents(folder)
+    documents = load_documents(folder) if documents is None else documents
     current_ids = set()
     for document in documents:
         for index, chunk in enumerate(split_text(document.text, chunk_size, overlap)):
-            identity = f"{corpus}\0{document.source}\0{document.page}\0{index}"
+            identity = f"{id_prefix}{corpus}\0{document.source}\0{document.page}\0{index}"
             chunk_id = hashlib.sha256(identity.encode()).hexdigest()
             embeddings = ollama.embed(model=EMBED_MODEL, input=chunk, truncate=False)["embeddings"]
             collection.upsert(
@@ -69,9 +70,15 @@ def main():
     parser.add_argument("--overlap", type=int, default=80)
     parser.add_argument("--skip-index", action="store_true", help="Query the existing index without reprocessing files")
     parser.add_argument("--index-only", action="store_true", help="Prepare Level 5 without making an answer-generation call")
+    parser.add_argument("--updates", type=Path, help="Read a published Step 6 generation; requires --skip-index")
     add_model_arguments(parser, default_provider="gemini")
     args = parser.parse_args()
     validate_model_arguments(parser, args)
+    if args.updates:
+        if not args.skip_index or args.index_only:
+            parser.error("--updates requires --skip-index; only Step 6 writes published generations")
+        from update_store import resolve_cli_snapshot
+        resolve_cli_snapshot(args, parser)
     if args.skip_index and args.index_only:
         parser.error("--index-only cannot be combined with --skip-index")
     if not 0 <= args.overlap < args.chunk_size or args.top_k < 1:

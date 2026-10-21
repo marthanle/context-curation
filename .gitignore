@@ -15,6 +15,7 @@
 # Generated indexes, graph artifacts, extraction caches, and local database files
 /local_vectordb/
 /local_graph*.json
+/.context_updates/
 .*_cache/
 *.sqlite
 *.sqlite3
