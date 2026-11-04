@@ -71,3 +71,7 @@ htmlcov/
 ._*
 Thumbs.db
 Desktop.ini
+/postcards/trips/**/*.pdf
+/postcards/trips/**/*.JPG
+/postcards/trips/**/*.jpg
+/prepared_postcards/
