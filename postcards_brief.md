@@ -17,13 +17,13 @@ Postcard size: every postcard is a landscape rectangle with the proportions of a
 
 Front of each postcard: the photo fills the card inside a thin cream border, cropped with object-fit: cover so it is never squished. Below the photo, on the cream border, a small lowercase serif caption with the place and country like "chamonix, france" on the left, and "plate i.", "plate ii.", and so on on the right, numbered within that city. Soft drop shadow under the card.
 
-Back of each postcard: only the center postcard can flip. Clicking it flips it over with a smooth 3D animation, and clicking again flips it back. Design the back to look like a real vintage postcard:
-- Background is a slightly warmer off-white than the page (around #FBF8F1) with very subtle paper grain, same thin border and soft shadow as the front.
-- A thin sage green vertical divider line about 58% from the left, running from near the top to near the bottom.
-- On the left side, near the top, a short handwritten note in Caveat, dark ink gray, fairly large, lowercase, broken into 3 or 4 short lines like a little poem. Keep it to 10 to 30 words. Each postcard gets its own note, based on what is in that specific photo and the details in my notes for that stop, written in first person as me.
-- In the top right corner, a soft blush pink stamp drawn with inline SVG, with a scalloped perforated edge. Inside the stamp, a simple thin-line illustration in deep tea green that matches the city (a mountain for chamonix, a lake for annecy, a tower for paris), and the tiny letterspaced word "souvenir" at the bottom of the stamp.
-- A faded thin gray circular postmark overlapping the lower left corner of the stamp, slightly rotated, with the city name in small caps curving around the inside of the circle (use an SVG textPath).
-- On the right side, below the stamp, three thin sage green address lines, evenly spaced and left empty.
+Back of each postcard: only the center postcard can flip. Clicking it flips it over with a smooth 3D animation, and clicking again flips it back. Design the back like a real vintage postcard, using this exact layout:
+- The back face is a CSS grid with two columns: grid-template-columns: 58% 42%. Background around #FBF8F1 with very subtle paper grain, same thin border and soft shadow as the front, and about 28px of padding.
+- Left column: the handwritten note in Caveat, dark ink gray, lowercase, about 22px, broken into 3 or 4 short lines. The left column uses display: flex with align-items: center and justify-content: center so the note sits in the vertical middle of the card, not at the top. The note text itself is left-aligned like real handwriting, never centered, with about 24px of left padding. Keep the note to 10 to 30 words. Each postcard gets its own note based on that specific photo and my notes for that stop. Write it the way I would actually text a friend: first person (I, we, me), casual, and specific, using real details from my notes. It should never sound like a photo caption or description. Good: 'we got soft serve in the snow and it was so worth it'. Bad: 'savoring delicious ice cream cones in a cozy casual setting'.
+- The divider is a 1px sage green border-left on the right column, running the full height of the card. There is no other vertical line.
+- Right column, top right corner: a soft blush pink stamp drawn with inline SVG, about 70px wide, with a scalloped perforated edge. Inside it, a simple thin-line illustration in deep tea green that matches the place, and the tiny letterspaced word "souvenir" at the bottom.
+- A faded gray postmark drawn with inline SVG, about 80px: two thin solid concentric circles, with the place name in small caps curving along the top inside the outer ring using an SVG textPath on an arc (the text must follow the curve, never run straight up and down), and a few short wavy cancellation lines extending to the left of the circle. Position it absolutely so it overlaps the lower left corner of the stamp, rotated about -12 degrees, at about 60% opacity.
+- Right column, below the stamp: three thin sage green address lines, evenly spaced in the lower half of the column. They stay completely inside the right column and never cross the divider.
 
 Flip requirement: attach the click listener to the outer postcard container, not the front face, and toggle a "flipped" class on and off every click. Both faces use backface-visibility: hidden, and nothing on the back face (including the SVG stamp and postmark) can block clicks. Moving to another postcard or city resets any flipped card to its front.
 
@@ -32,3 +32,16 @@ Rules: follow my palette and dislikes for everything except the photos themselve
 Return one complete self-contained HTML file with all CSS and JavaScript inline and no frameworks, inside a single html code block.
 
 Photo filenames: copy every photo filename exactly as it appears in the context, character for character, including uppercase or lowercase file extensions (.JPG vs .jpg). Never invent or guess a filename.
+
+Single-city trips: if a trip has only one stop folder, still show its single city tab below the carousel so every trip has the same layout.
+
+Trip tab order (required): store all trips in one JavaScript array of objects, each with a "name" like "banff" and a "year" like 2025. Before rendering any tabs, sort that array in JavaScript with exactly this code:
+trips.sort((a, b) => a.year - b.year || a.name.localeCompare(b.name));
+Then build the trip tabs from the sorted array, and select the first trip in the sorted array when the page loads. Do not hardcode tab order in the HTML.
+
+Photo paths (required): the src for every image must start with "photos/" followed directly by the trip folder, like photos/banff-2025/01-banff/R0000420.jpg. Never include "trips/" anywhere in an image path.
+
+Japan captions: for the japan-2026 trip, every postcard caption is just "japan" and the city tab is just "japan". Do not name a specific city like Sapporo or Tokyo in the caption, stamp, or postmark. In the handwritten messages, only name a city if the photo description clearly shows a famous landmark from that city. Otherwise keep the message about the moment, not the location.
+
+
+Japan stamp: the stamp illustration for the japan-2026 trip is a simple thin-line Mt. Fuji with a small sun.

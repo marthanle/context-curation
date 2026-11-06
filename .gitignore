@@ -75,3 +75,8 @@ Desktop.ini
 /postcards/trips/**/*.JPG
 /postcards/trips/**/*.jpg
 /prepared_postcards/
+/postcards/trips/**/*.jpeg
+/postcards/trips/**/*.JPEG
+/postcards/trips/**/*.png
+/postcards/trips/**/*.PNG
+/postcards/trips/**/*.HEIC

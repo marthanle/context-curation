@@ -6,15 +6,16 @@
     <title>postcards from places i love</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
             --matcha: #A3B18A;
             --deep-tea: #588157;
-            --cream: #F5F0E6;
-            --blush: #E8C7C1;
+            --warm-cream: #F5F0E6;
+            --paper-bg: #FBF8F1;
+            --soft-blush: #E8C7C1;
             --ink: #3A3A3A;
-            --card-back: #FBF8F1;
+            --card-border: #E3DCD0;
         }
 
         * {
@@ -24,134 +25,149 @@
         }
 
         body {
-            background-color: var(--cream);
+            background-color: var(--warm-cream);
             color: var(--ink);
             font-family: 'Cormorant Garamond', Georgia, serif;
             min-height: 100vh;
             display: flex;
-            flex-direction: yn;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            padding: 4rem 2rem 2rem 2rem;
+            padding: 40px 20px;
             overflow-x: hidden;
-            background-image: radial-gradient(rgba(0,0,0,0.02) 1px, transparent 0);
-            background-size: 24px 24px;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 2rem;
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 900px;
         }
 
+        /* Header */
         .collection-label {
             font-size: 0.85rem;
             letter-spacing: 0.2em;
             text-transform: lowercase;
-            margin-bottom: 0.5rem;
-            color: var(--ink);
-            opacity: 0.8;
+            color: var(--deep-tea);
+            margin-bottom: 8px;
         }
 
         h1 {
-            font-size: clamp(2rem, 4vw, 3rem);
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 2.8rem;
             font-style: italic;
             font-weight: 400;
-            margin-bottom: 2rem;
-            letter-spacing: 0.02em;
+            margin-bottom: 24px;
+            text-align: center;
         }
 
+        /* Trip Tabs */
         .trip-tabs {
             display: flex;
-            gap: 2rem;
-            margin-bottom: 1.5rem;
-            font-size: 1.1rem;
+            gap: 28px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab {
+            background: none;
+            border: none;
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1.15rem;
             text-transform: lowercase;
-        }
-
-        .trip-tab {
             cursor: pointer;
-            padding-bottom: 0.25rem;
-            transition: opacity 0.2s;
-            opacity: 0.6;
+            color: var(--ink);
+            padding-bottom: 4px;
+            transition: color 0.2s ease;
         }
 
-        .trip-tab.active {
-            opacity: 1;
+        .tab.active {
             border-bottom: 2px solid var(--deep-tea);
+            color: var(--deep-tea);
         }
 
         .divider {
             width: 100%;
-            max-width: 600px;
+            max-width: 700px;
             height: 1px;
-            background-color: var(--matcha);
-            opacity: 0.4;
-            margin-bottom: 3rem;
+            background-color: var(--card-border);
+            margin: 10px 0 35px 0;
         }
 
-        .carousel-wrapper {
+        /* Carousel Area */
+        .carousel-container {
             position: relative;
             width: 100%;
-            max-width: 900px;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 400px;
-            margin-bottom: 2rem;
+            margin-bottom: 25px;
+            min-height: 380px;
         }
 
-        .carousel-track {
+        .nav-arrow {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: var(--deep-tea);
+            cursor: pointer;
+            padding: 0 15px;
+            z-index: 10;
+            transition: opacity 0.2s;
+        }
+
+        .nav-arrow:hover {
+            opacity: 0.7;
+        }
+
+        .cards-stage {
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
             width: 100%;
-            height: 100%;
-            perspective: 1500px;
+            max-width: 650px;
+            position: relative;
+            perspective: 1000px;
+            height: 380px;
         }
 
-        .postcard-container {
+        /* Postcard Structure */
+        .postcard-wrapper {
             position: absolute;
             width: min(80vw, 560px);
             aspect-ratio: 3 / 2;
             cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
             user-select: none;
         }
 
-        .postcard-container.prev {
-            transform: translateX(-55%) scale(0.85) rotate(-4deg);
+        .postcard-wrapper.prev {
+            transform: translateX(-35%) scale(0.85) rotate(-4deg);
             opacity: 0.4;
             z-index: 1;
-            filter: blur(1px);
-        }
-
-        .postcard-container.next {
-            transform: translateX(55%) scale(0.85) rotate(4deg);
-            opacity: 0.4;
-            z-index: 1;
-            filter: blur(1px);
-        }
-
-        .postcard-container.hidden-left {
-            transform: translateX(-120%) scale(0.7) rotate(-8deg);
-            opacity: 0;
-            z-index: 0;
             pointer-events: none;
         }
 
-        .postcard-container.hidden-right {
-            transform: translateX(120%) scale(0.7) rotate(8deg);
-            opacity: 0;
-            z-index: 0;
+        .postcard-wrapper.next {
+            transform: translateX(35%) scale(0.85) rotate(4deg);
+            opacity: 0.4;
+            z-index: 1;
             pointer-events: none;
         }
 
-        .postcard-container.active {
+        .postcard-wrapper.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.7);
+        }
+
+        .postcard-wrapper.active {
             transform: translateX(0) scale(1) rotate(0deg);
             opacity: 1;
-            z-index: 3;
+            z-index: 5;
         }
 
         .postcard {
@@ -159,12 +175,11 @@
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 12px 30px rgba(58, 58, 58, 0.08), 0 2px 6px rgba(58, 58, 58, 0.04);
-            background-color: var(--card-back);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(58, 58, 58, 0.08);
         }
 
-        .postcard-container.flipped .postcard {
+        .postcard-wrapper.flipped .postcard {
             transform: rotateY(180deg);
         }
 
@@ -173,120 +188,90 @@
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
+            background-color: var(--paper-bg);
+            border: 8px solid var(--warm-cream);
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.02);
             display: flex;
             flex-direction: column;
-            padding: 14px;
-            background-color: var(--card-back);
-            border: 1px solid rgba(163, 177, 138, 0.3);
         }
 
-        .card-front {
-            background-color: var(--card-back);
-        }
-
-        .card-back {
-            transform: rotateY(180deg);
-            background-color: var(--card-back);
-            background-image: radial-gradient(rgba(0,0,0,0.015) 1px, transparent 0);
-            background-size: 16px 16px;
-            display: grid;
-            grid-template-columns: 58% 42%;
-            padding: 24px;
-            position: relative;
-        }
-
-        .photo-frame {
-            flex: 1;
+        /* Front Face */
+        .card-front img {
             width: 100%;
-            overflow: hidden;
-            background-color: var(--cream);
-        }
-
-        .photo-frame img {
-            width: 100%;
-            height: 100%;
+            height: calc(100% - 32px);
             object-fit: cover;
             display: block;
         }
 
         .card-caption {
+            height: 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 10px;
-            font-size: 0.95rem;
+            padding: 0 12px;
+            font-size: 0.9rem;
             text-transform: lowercase;
             color: var(--ink);
+            background-color: var(--warm-cream);
         }
 
-        /* Back Design */
-        .back-left {
+        /* Back Face */
+        .card-back {
+            transform: rotateY(180deg);
+            display: grid;
+            grid-template-columns: 58% 42%;
+            padding: 28px;
+            background-color: var(--paper-bg);
+        }
+
+        .note-column {
             display: flex;
-            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            padding-right: 1.5rem;
-            position: relative;
+            padding-left: 24px;
+            padding-right: 10px;
         }
 
         .handwritten-note {
             font-family: 'Caveat', cursive;
-            font-size: 1.35rem;
-            line-height: 1.3;
-            color: #4a4a4a;
+            font-size: 22px;
+            color: #4A4A4A;
+            line-height: 1.35;
+            text-align: left;
+            text-transform: lowercase;
         }
 
-        .vertical-divider {
-            position: absolute;
-            left: 58%;
-            top: 15%;
-            bottom: 15%;
-            width: 1px;
-            background-color: var(--matcha);
-            opacity: 0.4;
-        }
-
-        .back-right {
+        .address-column {
+            border-left: 1px solid var(--matcha);
             display: flex;
             flex-direction: column;
-            padding-left: 1.5rem;
+            justify-content: space-between;
+            padding-left: 24px;
             position: relative;
         }
 
         .stamp-area {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 2rem;
+            align-self: flex-end;
             position: relative;
-            height: 75px;
+            width: 70px;
+            height: 85px;
         }
 
         .stamp {
-            width: 55px;
-            height: 65px;
-            background-color: var(--blush);
-            padding: 4px;
+            width: 70px;
+            height: 85px;
+            background-color: var(--soft-blush);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            justify-content: center;
             position: relative;
-            mask-image: radial-gradient(circle 3px at 0 6px, transparent 98%, black 100%),
-                        radial-gradient(circle 3px at 6px 0, transparent 98%, black 100%),
-                        radial-gradient(circle 3px at 100% 6px, transparent 98%, black 100%),
-                        radial-gradient(circle 3px at 6px 100%, transparent 98%, black 100%);
-            -webkit-mask-image: radial-gradient(circle 3px at 6px 0, transparent 98%, black 100%);
-            border: 1px dashed rgba(255,255,255,0.6);
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
         }
 
         .stamp svg {
-            width: 32px;
-            height: 32px;
-            stroke: var(--deep-tea);
-            fill: none;
-            stroke-width: 1.5;
-            margin-top: 4px;
+            width: 45px;
+            height: 45px;
         }
 
         .stamp-text {
@@ -294,347 +279,308 @@
             letter-spacing: 0.15em;
             text-transform: lowercase;
             color: var(--deep-tea);
+            margin-top: 4px;
         }
 
         .postmark {
             position: absolute;
-            right: 25px;
-            top: -5px;
-            width: 60px;
-            height: 60px;
+            top: 25px;
+            left: -35px;
+            width: 80px;
+            height: 80px;
+            opacity: 0.6;
+            transform: rotate(-12deg);
             pointer-events: none;
-            opacity: 0.45;
-            transform: rotate(-15deg);
         }
 
         .address-lines {
             display: flex;
             flex-direction: column;
-            gap: 1.2rem;
-            margin-top: 1rem;
+            gap: 16px;
+            margin-bottom: 20px;
         }
 
         .address-line {
             width: 100%;
             height: 1px;
             background-color: var(--matcha);
-            opacity: 0.3;
+            opacity: 0.5;
         }
 
-        /* Navigation Controls */
-        .nav-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 1rem;
-            z-index: 10;
-            color: var(--deep-tea);
-            opacity: 0.6;
-            transition: opacity 0.2s;
-        }
-
-        .nav-btn:hover {
-            opacity: 1;
-        }
-
-        .prev-btn { left: -3rem; }
-        .next-btn { right: -3rem; }
-
-        .nav-btn svg {
-            width: 24px;
-            height: 24px;
-            stroke: currentColor;
-            stroke-width: 1.5;
-            fill: none;
-        }
-
-        /* City Tabs & Hint */
-        .city-nav-container {
+        /* City Tabs */
+        .city-section {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 3rem;
             width: 100%;
+            margin-top: 10px;
         }
 
         .city-tabs {
             display: flex;
-            gap: 2rem;
-            font-size: 1rem;
-            text-transform: lowercase;
+            gap: 20px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .city-tab {
+            background: none;
+            border: none;
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1rem;
+            text-transform: lowercase;
             cursor: pointer;
-            padding-bottom: 0.2rem;
-            opacity: 0.6;
-            transition: opacity 0.2s;
+            color: var(--ink);
+            padding-bottom: 2px;
         }
 
         .city-tab.active {
-            opacity: 1;
             border-bottom: 2px solid var(--deep-tea);
+            color: var(--deep-tea);
         }
 
-        .flip-hint {
+        .instruction-text {
             font-style: italic;
             font-size: 0.9rem;
-            color: var(--ink);
-            opacity: 0.7;
+            color: var(--deep-tea);
+            margin-bottom: 25px;
         }
 
+        /* Footer */
         footer {
-            text-align: center;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             letter-spacing: 0.1em;
             text-transform: lowercase;
-            opacity: 0.7;
-            margin-top: auto;
-            padding-top: 2rem;
+            color: var(--deep-tea);
+            margin-top: 40px;
+            text-align: center;
         }
 
-        @media (max-width: 768px) {
-            .prev-btn { left: -0.5rem; }
-            .next-btn { right: -0.5rem; }
-            body { padding: 2rem 1rem 1rem 1rem; }
+        @media(max-width: 600px) {
+            h1 { font-size: 2.2rem; }
             .card-back { padding: 16px; }
-            .handwritten-note { font-size: 1.15rem; }
+            .handwritten-note { font-size: 18px; }
+            .carousel-container { min-height: 280px; }
+            .cards-stage { height: 280px; }
         }
     </style>
 </head>
 <body>
 
-    <header>
+    <div class="container">
         <div class="collection-label">a personal collection</div>
         <h1>postcards from places i love.</h1>
+
         <div class="trip-tabs" id="tripTabs"></div>
-    </header>
+        <div class="divider"></div>
 
-    <div class="divider"></div>
+        <div class="carousel-container">
+            <button class="nav-arrow" id="prevBtn">&#8249;</button>
+            <div class="cards-stage" id="cardsStage"></div>
+            <button class="nav-arrow" id="nextBtn">&#8250;</button>
+        </div>
 
-    <main class="carousel-wrapper" id="carouselWrapper">
-        <button class="nav-btn prev-btn" id="prevBtn" aria-label="Previous postcard">
-            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        </button>
-        
-        <div class="carousel-track" id="carouselTrack"></div>
-
-        <button class="nav-btn next-btn" id="nextBtn" aria-label="Next postcard">
-            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </button>
-    </main>
-
-    <div class="city-nav-container">
-        <div class="city-tabs" id="cityTabs"></div>
-        <div class="flip-hint">click a postcard to turn it over</div>
+        <div class="city-section">
+            <div class="city-tabs" id="cityTabs"></div>
+            <div class="instruction-text">click a postcard to turn it over</div>
+        </div>
     </div>
-
-    <div class="divider"></div>
 
     <footer>collected slowly, kept forever.</footer>
 
     <script>
-        const tripData = {
-            "france 2026": {
-                name: "france 2026",
-                cities: {
-                    "chamonix": [
-                        {
-                            file: "photos/france-2026/01-chamonix/R0002402.JPG",
-                            note: "warm pastries glowing in the bright shop lights after the cable car, sweet relief in the crisp alpine air.",
-                            stampType: "mountain"
-                        },
-                        {
-                            file: "photos/france-2026/01-chamonix/R0002424.JPG",
-                            note: "standing near the glowing blue ice inside the cavern, wrapped warm while exploring the deep cold world.",
-                            stampType: "mountain"
-                        },
-                        {
-                            file: "photos/france-2026/01-chamonix/R0002444.JPG",
-                            note: "red and green blooms framing the storefront under the daytime sky, a quiet wandering moment in town.",
-                            stampType: "mountain"
-                        },
-                        {
-                            file: "photos/france-2026/01-chamonix/R0002461.JPG",
-                            note: "looking up at the rugged snowy peaks and ancient rock, the sheer scale of the breathtaking mountain scenery.",
-                            stampType: "mountain"
-                        },
-                        {
-                            file: "photos/france-2026/01-chamonix/R0002516.JPG",
-                            note: "taking in the majestic view from the high summit, surrounded by miles of crisp mountain air.",
-                            stampType: "mountain"
-                        }
-                    ],
-                    "annecy": [
-                        {
-                            file: "photos/france-2026/02-annecy/R0002549.JPG",
-                            note: "a surreal wide view looking down narrow European streets, wandering through the charming old town.",
-                            stampType: "lake"
-                        },
-                        {
-                            file: "photos/france-2026/02-annecy/R0002567.JPG",
-                            note: "historic buildings and bright blue skies reflecting softly in the tranquil town water on a sunny day.",
-                            stampType: "lake"
-                        },
-                        {
-                            file: "photos/france-2026/02-annecy/R0002594.JPG",
-                            note: "happy moments exploring traditional streets and mountain air, feeling completely refreshed by the lake.",
-                            stampType: "lake"
-                        },
-                        {
-                            file: "photos/france-2026/02-annecy/R0002616.JPG",
-                            note: "small boats drifting peacefully near the steep green shore, soaking in the gentle pace of the water.",
-                            stampType: "lake"
-                        },
-                        {
-                            file: "photos/france-2026/02-annecy/R0002632.JPG",
-                            note: "soft light illuminating the ornate arches and quiet historic beauty inside the ancient church sanctuary.",
-                            stampType: "lake"
-                        }
-                    ],
-                    "paris": [
-                        {
-                            file: "photos/france-2026/03-paris/R0002879.jpg",
-                            note: "catching a quiet moment framing the iconic tower against the clear daytime sky in the city.",
-                            stampType: "tower"
-                        },
-                        {
-                            file: "photos/france-2026/03-paris/R0002909.JPG",
-                            note: "vibrant pastel macarons neatly arranged in the bright bakery case, almost too pretty to eat.",
-                            stampType: "tower"
-                        },
-                        {
-                            file: "photos/france-2026/03-paris/R0003031.JPG",
-                            note: "minimalist white walls and natural light filling the grand high-ceiling gallery during an art afternoon.",
-                            stampType: "tower"
-                        },
-                        {
-                            file: "photos/france-2026/03-paris/R0003088.JPG",
-                            note: "smiling beside the serene water lily paintings, surrounded by the peaceful impressionist gallery light.",
-                            stampType: "tower"
-                        },
-                        {
-                            file: "photos/france-2026/03-paris/R0003186.JPG",
-                            note: "browsing shelves filled with colorful little treasures and whimsical objects in a bright shop.",
-                            stampType: "tower"
-                        },
-                        {
-                            file: "photos/france-2026/03-paris/R0003201.JPG",
-                            note: "sharing a delicious gourmet meal in a relaxed neighborhood bistro, savoring the slow evening.",
-                            stampType: "tower"
-                        }
-                    ]
-                }
+        const trips = [
+            {
+                name: "banff",
+                year: 2025,
+                folder: "banff-2025",
+                stops: [
+                    {
+                        name: "banff",
+                        photos: [
+                            { file: "trips/banff-2025/01-banff/IMG_6744.JPG", note: "we went white water rafting on cold glacial water and everyone was completely soaked and laughing." },
+                            { file: "trips/banff-2025/01-banff/R0000420.jpg", note: "deep blue lake reflecting giant mountains while we stood quietly at the water edge." },
+                            { file: "trips/banff-2025/01-banff/R0000432.JPG", note: "small orange boats floating softly on the glassy blue surface of the lake." },
+                            { file: "trips/banff-2025/01-banff/R0000633.JPG", note: "paddling out on the turquoise water with mountains all around us making us feel so small." },
+                            { file: "trips/banff-2025/01-banff/R0000677.JPG", note: "posing near the water with snow peaks behind us and cold crisp air everywhere." },
+                            { file: "trips/banff-2025/01-banff/R0000715.JPG", note: "hiking near roaring waterfalls with the best views across the entire valley." },
+                            { file: "trips/banff-2025/01-banff/R0000779.JPG", note: "stopping at every single viewpoint because the mountain panoramas were just breathtaking." }
+                        ]
+                    }
+                ]
+            },
+            {
+                name: "france",
+                year: 2026,
+                folder: "france-2026",
+                stops: [
+                    {
+                        name: "chamonix",
+                        photos: [
+                            { file: "trips/france-2026/01-chamonix/R0002402.JPG", note: "we ducked into a warm bakery out of the chill and picked up fresh pastries." },
+                            { file: "trips/france-2026/01-chamonix/R0002424.JPG", note: "walking through the ice cave tunnel where everything glowed in shades of brilliant blue." },
+                            { file: "trips/france-2026/01-chamonix/R0002444.JPG", note: "strolling past charming storefronts in the mountain air before dinner." },
+                            { file: "trips/france-2026/01-chamonix/R0002461.JPG", note: "vast rocky peaks towering above the green forests under a clear sky." },
+                            { file: "trips/france-2026/01-chamonix/R0002516.JPG", note: "standing at high elevation looking out at the endless snow capped summits." }
+                        ]
+                    },
+                    {
+                        name: "annecy",
+                        photos: [
+                            { file: "trips/france-2026/02-annecy/R0002549.JPG", note: "wandering narrow cobblestone streets beneath old rustic timber framed buildings." },
+                            { file: "trips/france-2026/02-annecy/R0002567.JPG", note: "canals reflecting pastel buildings with bright flowers blooming by the water." },
+                            { file: "trips/france-2026/02-annecy/R0002594.JPG", note: "smiling by the lakeside while the afternoon sun warmed the old town." },
+                            { file: "trips/france-2026/02-annecy/R0002616.JPG", note: "taking out a paddle boat on the glassy crystal clear lake." },
+                            { file: "trips/france-2026/02-annecy/R0002632.JPG", note: "stepping inside historic halls with high ornate ceilings and stained glass." }
+                        ]
+                    },
+                    {
+                        name: "paris",
+                        photos: [
+                            { file: "trips/france-2026/03-paris/R0002879.jpg", note: "catching a glimpse of the eiffel tower while wandering the city streets." },
+                            { file: "trips/france-2026/03-paris/R0002909.JPG", note: "choosing colorful macarons from a glowing display case in the afternoon." },
+                            { file: "trips/france-2026/03-paris/R0003031.JPG", note: "quiet moments admiring classical architecture and glowing art exhibits." },
+                            { file: "trips/france-2026/03-paris/R0003088.JPG", note: "surrounded by massive vibrant water lily paintings in a sunlit gallery." },
+                            { file: "trips/france-2026/03-paris/R0003186.JPG", note: "browsing little display shelves filled with charming trinkets and gifts." },
+                            { file: "trips/france-2026/03-paris/R0003201.JPG", note: "sharing a wonderful bistro dinner with rich sauce and golden potatoes." }
+                        ]
+                    }
+                ]
+            },
+            {
+                name: "japan",
+                year: 2026,
+                folder: "japan-2026",
+                stops: [
+                    {
+                        name: "japan",
+                        photos: [
+                            { file: "trips/japan-2026/01-japan/R0001381.JPG", note: "stopping for cold drinks at a cozy pub tucked away down a quiet alley." },
+                            { file: "trips/japan-2026/01-japan/R0001421.JPG", note: "we got ice cream cones in the snow and it was so worth it." },
+                            { file: "trips/japan-2026/01-japan/R0001447.JPG", note: "walking through small neighborhood streets past local shops in the cold." },
+                            { file: "trips/japan-2026/01-japan/R0001464.JPG", note: "bundled up in heavy winter coats while exploring snowy town paths." },
+                            { file: "trips/japan-2026/01-japan/R0001507.jpg", note: "looking out at the rugged coastline where waves crashed against ancient rock pillars." },
+                            { file: "trips/japan-2026/01-japan/R0001532.JPG", note: "sitting quietly by the ocean watching the distant horizon over the water." },
+                            { file: "trips/japan-2026/01-japan/R0001563.JPG", note: "strolling through peaceful gardens while delicate cherry blossoms began to open." },
+                            { file: "trips/japan-2026/01-japan/R0001640.JPG", note: "snacking on warm street food while wandering through bustling night markets." },
+                            { file: "trips/japan-2026/01-japan/R0001665.JPG", note: "bright pink blossoms heavy on the branches filling the air with spring." },
+                            { file: "trips/japan-2026/01-japan/R0001684.JPG", note: "stopping for photos together under a blooming tree on a lovely afternoon." }
+                        ]
+                    }
+                ]
             }
-        };
+        ];
 
-        const romanNumerals = ["plate i.", "plate ii.", "plate iii.", "plate iv.", "plate v.", "plate vi.", "plate vii.", "plate viii."];
+        // Sort trips exactly per instructions
+        trips.sort((a, b) => a.year - b.year || a.name.localeCompare(b.name));
 
-        let currentTripKey = Object.keys(tripData)[0];
-        let currentCityKey = Object.keys(tripData[currentTripKey].cities)[0];
-        let currentIndex = 0;
+        let currentTripIndex = 0;
+        let currentCityIndex = 0;
+        let currentCardIndex = 0;
 
         const tripTabsEl = document.getElementById('tripTabs');
         const cityTabsEl = document.getElementById('cityTabs');
-        const carouselTrack = document.getElementById('carouselTrack');
+        const cardsStageEl = document.getElementById('cardsStage');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
 
-        function getStampSvg(type) {
-            if (type === 'mountain') {
-                return `<svg viewBox="0 0 24 24"><path d="M2 20l10-16 10 16H2z"/><path d="M8 20l4-7 4 7"/></svg>`;
-            } else if (type === 'lake') {
-                return `<svg viewBox="0 0 24 24"><path d="M2 12c3-2 5-2 8 0s5 2 8 0 5-2 8 0"/><path d="M2 16c3-2 5-2 8 0s5 2 8 0 5-2 8 0"/></svg>`;
-            } else {
-                return `<svg viewBox="0 0 24 24"><path d="M10 22v-6h4v6"/><path d="M6 10h12l-1-6H7l-1 6z"/><path d="M12 4V2"/></svg>`;
-            }
-        }
-
         function renderTripTabs() {
             tripTabsEl.innerHTML = '';
-            Object.keys(tripData).forEach(tripKey => {
-                const tab = document.createElement('div');
-                tab.className = `trip-tab ${tripKey === currentTripKey ? 'active' : ''}`;
-                tab.textContent = tripKey;
-                tab.onclick = () => {
-                    currentTripKey = tripKey;
-                    currentCityKey = Object.keys(tripData[tripKey].cities)[0];
-                    currentIndex = 0;
-                    init();
-                };
-                tripTabsEl.appendChild(tab);
+            trips.forEach((trip, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `tab ${idx === currentTripIndex ? 'active' : ''}`;
+                btn.textContent = `${trip.name} ${trip.year}`;
+                btn.addEventListener('click', () => {
+                    currentTripIndex = idx;
+                    currentCityIndex = 0;
+                    currentCardIndex = 0;
+                    renderAll();
+                });
+                tripTabsEl.appendChild(btn);
             });
         }
 
         function renderCityTabs() {
             cityTabsEl.innerHTML = '';
-            const cities = tripData[currentTripKey].cities;
-            Object.keys(cities).forEach(cityKey => {
-                const tab = document.createElement('div');
-                tab.className = `city-tab ${cityKey === currentCityKey ? 'active' : ''}`;
-                tab.textContent = cityKey;
-                tab.onclick = () => {
-                    currentCityKey = cityKey;
-                    currentIndex = 0;
-                    renderCarousel();
-                    renderCityTabs();
-                };
-                cityTabsEl.appendChild(tab);
+            const trip = trips[currentTripIndex];
+            trip.stops.forEach((stop, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `city-tab ${idx === currentCityIndex ? 'active' : ''}`;
+                btn.textContent = stop.name;
+                btn.addEventListener('click', () => {
+                    currentCityIndex = idx;
+                    currentCardIndex = 0;
+                    renderAll();
+                });
+                cityTabsEl.appendChild(btn);
             });
         }
 
+        function getRomanNumeral(num) {
+            const romans = ["i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix", "x", "xi", "xii", "xiii", "xiv", "xv"];
+            return romans[num] || (num + 1);
+        }
+
+        function getStampSvg(tripName) {
+            if (tripName === 'japan') {
+                return `<svg viewBox="0 0 100 100"><circle cx="70" cy="35" r="12" fill="none" stroke="#588157" stroke-width="3"/><path d="M15 75 L35 45 L50 60 L65 40 L85 75 Z" fill="none" stroke="#588157" stroke-width="3" stroke-linejoin="round"/></svg>`;
+            } else if (tripName === 'banff') {
+                return `<svg viewBox="0 0 100 100"><path d="M20 70 L50 30 L80 70 Z" fill="none" stroke="#588157" stroke-width="3"/><path d="M35 70 Q50 55 65 70" fill="none" stroke="#588157" stroke-width="3"/></svg>`;
+            } else {
+                return `<svg viewBox="0 0 100 100"><path d="M50 20 Q70 40 50 80 Q30 40 50 20" fill="none" stroke="#588157" stroke-width="3"/></svg>`;
+            }
+        }
+
         function renderCarousel() {
-            carouselTrack.innerHTML = '';
-            const photos = tripData[currentTripKey].cities[currentCityKey];
+            cardsStageEl.innerHTML = '';
+            const trip = trips[currentTripIndex];
+            const stop = trip.stops[currentCityIndex];
+            const photos = stop.photos;
 
-            photos.forEach((photoObj, idx) => {
-                const container = document.createElement('div');
-                
-                let positionClass = 'hidden-right';
-                if (idx === currentIndex) {
-                    positionClass = 'active';
-                } else if (idx === (currentIndex - 1 + photos.length) % photos.length) {
-                    positionClass = 'prev';
-                } else if (idx === (currentIndex + 1) % photos.length) {
-                    positionClass = 'next';
-                }
-                
-                container.className = `postcard-container ${positionClass}`;
-                
-                const romanNum = romanNumerals[idx % romanNumerals.length];
-                const locationLabel = `${currentCityKey}, ${currentTripKey.split(' ')[0]}`;
+            photos.forEach((photoData, idx) => {
+                const wrapper = document.createElement('div');
+                let posClass = 'hidden';
+                if (idx === currentCardIndex) posClass = 'active';
+                else if (idx === (currentCardIndex - 1 + photos.length) % photos.length) posClass = 'prev';
+                else if (idx === (currentCardIndex + 1) % photos.length) posClass = 'next';
 
-                container.innerHTML = `
+                wrapper.className = `postcard-wrapper ${posClass}`;
+                
+                const imgSrc = photoData.file.replace('trips/', 'photos/');
+                const placeName = trip.name === 'japan' ? 'japan' : `${stop.name}, ${trip.name.split('-')[0]}`;
+                const plateText = `plate ${getRomanNumeral(idx)}.`;
+
+                wrapper.innerHTML = `
                     <div class="postcard">
                         <div class="card-face card-front">
-                            <div class="photo-frame">
-                                <img src="${photoObj.file}" alt="${currentCityKey} view" loading="lazy">
-                            </div>
+                            <img src="${imgSrc}" alt="postcard photo" loading="lazy">
                             <div class="card-caption">
-                                <span>${locationLabel}</span>
-                                <span>${romanNum}</span>
+                                <span>${placeName}</span>
+                                <span>${plateText}</span>
                             </div>
                         </div>
                         <div class="card-face card-back">
-                            <div class="back-left">
-                                <p class="handwritten-note">${photoObj.note}</p>
+                            <div class="note-column">
+                                <div class="handwritten-note">${photoData.note}</div>
                             </div>
-                            <div class="vertical-divider"></div>
-                            <div class="back-right">
+                            <div class="address-column">
                                 <div class="stamp-area">
                                     <svg class="postmark" viewBox="0 0 100 100">
-                                        <path id="curve" fill="transparent" d="M 15, 50 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" />
-                                        <text font-size="13" font-family="sans-serif" letter-spacing="3" fill="#3A3A3A">
-                                            <textPath href="#curve" startOffset="0%">${currentCityKey.toUpperCase()}</textPath>
+                                        <defs>
+                                            <path id="curve-${idx}" d="M 15,50 A 35,35 0 1,1 85,50" />
+                                        </defs>
+                                        <circle cx="50" cy="50" r="38" fill="none" stroke="#888" stroke-width="2"/>
+                                        <circle cx="50" cy="50" r="33" fill="none" stroke="#888" stroke-width="1"/>
+                                        <text font-size="11" fill="#666" font-family="sans-serif" letter-spacing="2">
+                                            <textPath href="#curve-${idx}" startOffset="50%" text-anchor="middle">${placeName.toUpperCase()}</textPath>
                                         </text>
+                                        <line x1="5" y1="65" x2="25" y2="65" stroke="#888" stroke-width="2"/>
+                                        <line x1="2" y1="73" x2="22" y2="73" stroke="#888" stroke-width="2"/>
                                     </svg>
                                     <div class="stamp">
-                                        ${getStampSvg(photoObj.stampType)}
-                                        <span class="stamp-text">souvenir</span>
+                                        ${getStampSvg(trip.name)}
+                                        <div class="stamp-text">souvenir</div>
                                     </div>
                                 </div>
                                 <div class="address-lines">
@@ -647,55 +593,53 @@
                     </div>
                 `;
 
-                container.onclick = (e) => {
-                    if (container.classList.contains('active')) {
-                        container.classList.toggle('flipped');
+                wrapper.addEventListener('click', (e) => {
+                    if (wrapper.classList.contains('active')) {
+                        wrapper.classList.toggle('flipped');
                     } else {
-                        currentIndex = idx;
+                        currentCardIndex = idx;
                         renderCarousel();
                     }
-                };
+                });
 
-                carouselTrack.appendChild(container);
+                cardsStageEl.appendChild(wrapper);
             });
         }
 
-        function changeSlide(direction) {
-            const photos = tripData[currentTripKey].cities[currentCityKey];
-            currentIndex = (currentIndex + direction + photos.length) % photos.length;
+        function changeCard(direction) {
+            const trip = trips[currentTripIndex];
+            const stop = trip.stops[currentCityIndex];
+            const count = stop.photos.length;
+            currentCardIndex = (currentCardIndex + direction + count) % count;
             renderCarousel();
         }
 
-        prevBtn.onclick = () => changeSlide(-1);
-        nextBtn.onclick = () => changeSlide(1);
+        prevBtn.addEventListener('click', () => changeCard(-1));
+        nextBtn.addEventListener('click', () => changeCard(1));
 
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') changeSlide(-1);
-            if (e.key === 'ArrowRight') changeSlide(1);
+            if (e.key === 'ArrowLeft') changeCard(-1);
+            if (e.key === 'ArrowRight') changeCard(1);
         });
 
         // Touch swipe support
         let touchStartX = 0;
-        carouselTrack.addEventListener('touchstart', (e) => {
+        cardsStageEl.addEventListener('touchstart', e => {
             touchStartX = e.changedTouches[0].screenX;
-        }, {passive: true});
+        });
+        cardsStageEl.addEventListener('touchend', e => {
+            let touchEndX = e.changedTouches[0].screenX;
+            if (touchEndX < touchStartX - 50) changeCard(1);
+            if (touchEndX > touchStartX + 50) changeCard(-1);
+        });
 
-        carouselTrack.addEventListener('touchend', (e) => {
-            const touchEndX = e.changedTouches[0].screenX;
-            if (touchStartX - touchEndX > 50) {
-                changeSlide(1);
-            } else if (touchEndX - touchStartX > 50) {
-                changeSlide(-1);
-            }
-        }, {passive: true});
-
-        function init() {
+        function renderAll() {
             renderTripTabs();
             renderCityTabs();
             renderCarousel();
         }
 
-        init();
+        renderAll();
     </script>
 </body>
 </html>
