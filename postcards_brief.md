@@ -8,7 +8,7 @@ Page layout, top to bottom:
 3. A row of lowercase trip tabs, one for each trip folder in the context (like "france 2026"). Only show trips that exist in the context. The active tab is underlined in deep tea green.
 4. A thin divider line.
 5. The postcard carousel (described below).
-6. Below the carousel, a row of lowercase city tabs for the current trip, one per stop folder in order (like "chamonix", "annecy", "paris"). The active city is underlined in deep tea green. In the center of that row, small italic text: "click a postcard to turn it over".
+6. Below the carousel, a row of lowercase city tabs for the current trip, one per stop folder in order (like "chamonix", "annecy", "paris"). The active city is underlined in deep tea green. The city tabs are centered. Directly below the city tabs, on its own line and also centered, small italic text: "click a postcard to turn it over". The hint is never in the same row as the city tabs.
 7. A thin divider line and a tiny footer: "collected slowly, kept forever."
 
 Carousel: the carousel only shows postcards for the selected city. Every photo from that city becomes its own postcard. One postcard sits large in the center, and the previous and next postcards peek out behind it on the left and right, smaller, slightly faded, and tilted a few degrees, like cards spread on a table. Thin arrow buttons on the far left and right move between postcards, with a smooth slide animation. Left and right arrow keys and swiping on phones also work. Clicking a city tab switches the carousel to that city's postcards and starts at the first one. Clicking a trip tab switches to that trip and its first city.
@@ -35,7 +35,7 @@ Photo filenames: copy every photo filename exactly as it appears in the context,
 
 Single-city trips: if a trip has only one stop folder, still show its single city tab below the carousel so every trip has the same layout.
 
-Trip tab order (required): store all trips in one JavaScript array of objects, each with a "name" like "banff" and a "year" like 2025. Before rendering any tabs, sort that array in JavaScript with exactly this code:
+Trip tab order (required): store all trips in one JavaScript array that must be declared exactly as "const trips = [" (the variable name must be trips), each with a "name" like "banff" and a "year" like 2025. Before rendering any tabs, sort that array in JavaScript with exactly this code:
 trips.sort((a, b) => a.year - b.year || a.name.localeCompare(b.name));
 Then build the trip tabs from the sorted array, and select the first trip in the sorted array when the page loads. Do not hardcode tab order in the HTML.
 
@@ -45,3 +45,32 @@ Japan captions: for the japan-2026 trip, every postcard caption is just "japan" 
 
 
 Japan stamp: the stamp illustration for the japan-2026 trip is a simple thin-line Mt. Fuji with a small sun.
+
+Cancun stamp: the stamp illustration for the cancun trip is a simple thin-line palm tree over gentle waves.
+
+Los Angeles stamp: the stamp illustration for the los-angeles trip is a simple thin-line palm tree with a setting sun.
+
+Captions and city tab labels (required): never build captions from folder names. Use exactly these, all lowercase:
+- banff-2025 / 01-banff: caption "banff, canada", city tab "banff"
+- cancun-2026 / 01-cancun: caption "cancun, mexico", city tab "cancun"
+- france-2026 / 01-chamonix: caption "chamonix, france", city tab "chamonix"
+- france-2026 / 02-annecy: caption "annecy, france", city tab "annecy"
+- france-2026 / 03-paris: caption "paris, france", city tab "paris"
+- japan-2026 / 01-japan: caption "japan", city tab "japan"
+- los-angeles-2026 / 01-los-angeles: caption "los angeles, california", city tab "los angeles"
+Trip tabs show the trip name with spaces instead of dashes, like "los angeles 2026". No dashes anywhere in visible text.
+
+- switzerland-2025 / 01-switzerland: caption "switzerland", city tab "switzerland"
+
+Switzerland stamp: the stamp illustration for the switzerland trip is a simple thin-line Matterhorn peak.
+
+Wax seal (required): wrap the main title in a container styled display: inline-flex; align-items: flex-start; gap: 6px. Directly after the h1 inside that container, put exactly this empty placeholder and nothing else: <span id="wax-seal"></span>. Do not draw a seal yourself. Add this CSS: .wax-seal { margin-top: -6px; flex-shrink: 0; } and on screens under 600px wide: .wax-seal { width: 48px; height: 48px; }
+
+Trip tab labels (required): every trip tab shows the trip name and its year, like "banff 2025" or "los angeles 2026". Never drop the year.
+
+
+First photo order (required): each city's carousel starts on this photo, and the rest follow in their original order:
+- banff-2025/01-banff starts on R0000420.jpg
+- france-2026/01-chamonix starts on R0002516.JPG
+- japan-2026/01-japan starts on R0001447.JPG
+- los-angeles-2026/01-los-angeles starts on R0002071.JPG
