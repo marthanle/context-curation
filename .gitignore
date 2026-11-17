@@ -80,3 +80,4 @@ Desktop.ini
 /postcards/trips/**/*.png
 /postcards/trips/**/*.PNG
 /postcards/trips/**/*.HEIC
+.firebase/
